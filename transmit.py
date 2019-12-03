@@ -27,15 +27,16 @@ def send_data(data):
     xbee.send("tx", dest_addr=b'\x00\x00', data=bytes("{}".format(data), 'utf-8'))
 
 # main loop/functionality
-#while True:
-#    try:
+while True:
+    try:
+        print("Transmitting...")
+        send_data("hello world")
+
+        time.sleep(0.3)
+    except KeyboardInterrupt:
+        break
 
 
-#    except KeyboardInterrupt:
-#        break
-
-print("Transmitting...")
-send_data("hello world")
 
 #cleanup
 ser.flushInput()

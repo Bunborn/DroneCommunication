@@ -31,6 +31,14 @@ ser = serial.Serial(SERIAL_PORT, baudrate=BAUD_RATE)
 xbee = XBee(ser, callback=receive_data, escaped=False)
 
 
+# main loop/functionality
+while True:
+    try:
+        # operate in async mode where all messages will go to handler
+        time.sleep(0.001)
+    except KeyboardInterrupt:
+        break
+
 #cleanup
 ser.flushInput()
 ser.flushOutput()
