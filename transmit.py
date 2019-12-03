@@ -2,16 +2,19 @@
 # 12/3/2019
 # Inital code pulled from https://jekhokie.github.io/raspberry-pi/raspbian/xbee/python/linux/electronics/2018/12/30/raspberry-pi-xbee-rxtx.html
 
+#
+# Transmits xbee messages over serial connection
+#
+
 # tranmission device id = 0x01
 # receive device id = 0x00
 
 # import libraries
 import serial
 import time
-import sys
 from xbee import XBee
 
-# assign the XBee device settings
+# assign the XBee device settings and port numbers
 SERIAL_PORT = "/dev/ttyS3"
 BAUD_RATE = 9600
 
