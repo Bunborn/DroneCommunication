@@ -15,7 +15,7 @@ import time
 from xbee import XBee
 
 # assign the XBee device settings and port numbers
-SERIAL_PORT = "/dev/ttyS3"
+SERIAL_PORT = "COM7"
 BAUD_RATE = 9600
 
 # configure the xbee
@@ -24,13 +24,14 @@ xbee = XBee(ser, escaped = False)
 
 # handler for sending data to a receiving XBee device
 def send_data(data):
-    xbee.send("tx", dest_addr=b'\x00\x00', data=bytes("{}".format(data), 'utf-8'))
+    xbee.send("tx", dest_addr=b'\x00\x01', data=bytes("{}".format(data), 'utf-8'))
 
 # main loop/functionality
 while True:
     try:
         print("Transmitting...")
-        send_data("hello world")
+        data = input("Enter data to send: ")
+        send_data(data)
 
         time.sleep(0.3)
     except KeyboardInterrupt:

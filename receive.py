@@ -15,7 +15,7 @@ import time
 from xbee import XBee
 
 # assign the XBee device settings and port numbers
-SERIAL_PORT = "/dev/ttyS3"
+SERIAL_PORT = "COM8"
 BAUD_RATE = 9600
 
 # handler for whenever data is received from transmitters - operates asynchronously
