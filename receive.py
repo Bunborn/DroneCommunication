@@ -15,15 +15,14 @@ import time
 from xbee import XBee
 
 # assign the XBee device settings and port numbers
-SERIAL_PORT = "COM8"
+SERIAL_PORT = "COM7"
 BAUD_RATE = 9600
 
 # handler for whenever data is received from transmitters - operates asynchronously
 def receive_data(data):
-    print("Received data: {}".format(data))
+    print("Received data packet: {}".format(data))
     rx = data['rf_data'].decode('utf-8')
 
-    print("Packet: {}".format(data))
     print("Data: {}".format(data['rf_data']))
 
 # configure the xbee and enable asynchronous mode
