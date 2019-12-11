@@ -21,9 +21,9 @@ secondDroneLat = 33.214837 #degrees
 secondDroneLong = -87.542813 #degrees
 
 # connect to the Vehicle
-print ("Connecting")
+print ("Connecting"...)
 connection_string = '/dev/ttyUSB0'
-vehicle = connect(connection_string, wait_ready=True)
+vehicle = connect(connection_string, wait_ready=True) #vehicle is a px4 object
 
 # display basic vehicle state
 print (" Type: %s" % vehicle._vehicle_type)
