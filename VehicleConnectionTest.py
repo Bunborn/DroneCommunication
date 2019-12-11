@@ -8,14 +8,24 @@
 # Import DroneKit-Python
 from dronekit import connect, Command, LocationGlobal
 from pymavlink import mavutil
+import RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
 import time, sys, argparse, math, mpu
 
-# Connect to the Vehicle
+GPIO.setwarnings(False)    # Ignore warning for now
+GPIO.setmode(GPIO.BOARD)   # Use physical pin numbering
+GPIO.setup(8, GPIO.OUT, initial=GPIO.LOW)   # Set pin 8 to be an output pin and set initial value to low (off)
+
+# global variables
+safeDistance = 730 #feet
+secondDroneLat = 33.214837 #degrees
+secondDroneLong = -87.542813 #degrees
+
+# connect to the Vehicle
 print ("Connecting")
 connection_string = '/dev/ttyUSB0'
 vehicle = connect(connection_string, wait_ready=True)
 
-# Display basic vehicle state
+# display basic vehicle state
 print (" Type: %s" % vehicle._vehicle_type)
 print (" Armed: %s" % vehicle.armed)
 print (" System status: %s" % vehicle.system_status.state)
@@ -36,7 +46,7 @@ if mode == 1:
         time.sleep(0.1)
         count = count + 1
 
-if mode == 2:
+elif mode == 2:
     # Drone location
     lat1 = vehicle.location.global_relative_frame.lat
     lon1 = vehicle.location.global_relative_frame.lon
@@ -49,3 +59,30 @@ if mode == 2:
     dist = mpu.haversine_distance((lat1, lon1), (lat2, lon2)) #km
     dist = dist * 3280.24 #km -> feet
     print("Distance to Shelby Engineering Quad Fountain : ", dist)
+
+elif mode == 3:
+    
+    count = 0
+    while count < 1000:
+        # Drone location
+        lat1 = vehicle.location.global_relative_frame.lat
+        lon1 = vehicle.location.global_relative_frame.lon
+
+        # second drone location
+        lat2 = secondDroneLat
+        lon2 = secondDroneLong
+
+        # Distance calculation
+        dist = mpu.haversine_distance((lat1, lon1), (lat2, lon2)) #km
+        dist = dist * 3280.24 #km -> feet
+        print("%s feet", dist)
+        if dist < safeDistance:
+            GPIO.output(8, GPIO.HIGH) # Turn on
+            print("Unsafe distance!")
+        else:
+            GPIO.output(8, GPIO.LOW) # Turn off
+        time.sleep(0.5)
+        count = count + 1
+
+else:
+    print("Invalid input")
