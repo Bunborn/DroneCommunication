@@ -22,9 +22,11 @@ print (" System status: %s" % vehicle.system_status.state)
 print (" GPS: %s" % vehicle.gps_0)
 print (" Alt: %s" % vehicle.location.global_relative_frame.alt)
 print (" Heading: %s" % vehicle.heading)
-print ("System status: %s" % vehicle.system_status.state)
-print ("Mode: %s" % vehicle.mode.name)
+print (" Mode: %s" % vehicle.mode.name)
 
-while True:
+count = 0
+while count < 50:
     print(" Heading: %s" % vehicle.heading)
-    time.sleep(0.1)
+    print(" Altitude: %s" % vehicle.location.global_relative_frame.alt)
+    time.sleep(0.5)
+    count = count + 1
