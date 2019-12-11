@@ -10,10 +10,10 @@ from dronekit import connect, Command, LocationGlobal
 from pymavlink import mavutil
 import time, sys, argparse, math, mpu
 
-# Connect to the Vehicle
-print ("Connecting")
-connection_string = '/dev/ttyUSB0'
-vehicle = connect(connection_string, wait_ready=True)
+# Connect to the PX4
+print ("Connecting...")
+connection_string = '/dev/ttyUSB0' 
+vehicle = connect(connection_string, wait_ready=True) #vehicle is a px4 object
 
 # Display basic vehicle state
 print (" Type: %s" % vehicle._vehicle_type)
