@@ -17,7 +17,7 @@ GPIO.setmode(GPIO.BOARD)   # Use physical pin numbering
 GPIO.setup(8, GPIO.OUT, initial=GPIO.LOW)   # Set pin 8 to be an output pin and set initial value to low (off)
 
 # collision avoidance variables
-mode = 0
+mode = 10
 safeDistance = 730 #feet
 secondDroneLat = 33.214837 #degrees
 secondDroneLong = -87.542813 #degrees
@@ -30,7 +30,8 @@ BAUD_RATE = 9600
 def receive_data(data):
     data = format(data['rf_data'])
     print(data)
-    mode = data
+    mode = int(data)
+    print("mode now is", mode)
 
 # configure the xbee and enable asynchronous mode
 ser = serial.Serial(vehicle_connection_string, baudrate=BAUD_RATE)
@@ -53,11 +54,14 @@ isControlledOffBoard = input(" Connected!\nChoose (0) onboard or (1) offboard op
 
 while True:
     if isControlledOffBoard:
-        mode = input("Enter input from base station : ( 1 ) for general heading, ( 2 ) for distance to fountain, ( 3 ) for collision warning ")
+        print("Enter input from base station : ( 1 ) for general heading, ( 2 ) for distance to fountain, ( 3 ) for collision warning ")
         while mode == 0:
             #waiting for input from xbee device
+            time.sleep(1)
+            flag=1111
+            print(mode)
             busyWork = 1
-    else:
+    elif isControlledOffBoard == 1:
         mode = input("( 1 ) for general heading, ( 2 ) for distance to fountain, ( 3 ) for collision warning ")
     if mode == 1:
         count = 0
@@ -86,7 +90,7 @@ while True:
     elif mode == 3:
         
         count = 0
-        while count < 1000:
+        while count < 30:
             # Drone location
             lat1 = vehicle.location.global_relative_frame.lat
             lon1 = vehicle.location.global_relative_frame.lon
