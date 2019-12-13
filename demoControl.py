@@ -17,13 +17,14 @@ GPIO.setmode(GPIO.BOARD)   # Use physical pin numbering
 GPIO.setup(8, GPIO.OUT, initial=GPIO.LOW)   # Set pin 8 to be an output pin and set initial value to low (off)
 
 # collision avoidance variables
-mode = 10
+global mode
 safeDistance = 730 #feet
 secondDroneLat = 33.214837 #degrees
 secondDroneLong = -87.542813 #degrees
 
-# assign the XBee device settings and port numbers
-vehicle_connection_string = '/dev/ttyUSB1'
+# assign the XBee device settings and ports
+vehicle_connection_string = "/dev/ttyUSB1"
+xbee_connection_string = "/dev/ttyUSB0"
 BAUD_RATE = 9600
 
 # handler for whenever data is received from transmitters - operates asynchronously
@@ -34,12 +35,12 @@ def receive_data(data):
     print("mode now is", mode)
 
 # configure the xbee and enable asynchronous mode
-ser = serial.Serial(vehicle_connection_string, baudrate=BAUD_RATE)
+ser = serial.Serial(xbee_connection_string, baudrate=BAUD_RATE)
 xbee = XBee(ser, callback=receive_data, escaped=False)
 
 # connect to the Vehicle
 print ("Connecting...")
-vehicle_connection_string = '/dev/ttyUSB0'
+
 vehicle = connect(vehicle_connection_string, wait_ready=True) #vehicle is a px4 object
 
 # display basic vehicle state
