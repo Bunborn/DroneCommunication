@@ -17,7 +17,7 @@ GPIO.setmode(GPIO.BOARD)   # Use physical pin numbering
 GPIO.setup(8, GPIO.OUT, initial=GPIO.LOW)   # Set pin 8 to be an output pin and set initial value to low (off)
 
 # collision avoidance variables
-global mode
+mode = 0
 safeDistance = 730 #feet
 secondDroneLat = 33.214837 #degrees
 secondDroneLong = -87.542813 #degrees
@@ -30,9 +30,8 @@ BAUD_RATE = 9600
 # handler for whenever data is received from transmitters - operates asynchronously
 def receive_data(data):
     data = format(data['rf_data'])
-    print(data)
+    global mode
     mode = int(data)
-    print("mode now is", mode)
 
 # configure the xbee and enable asynchronous mode
 ser = serial.Serial(xbee_connection_string, baudrate=BAUD_RATE)
@@ -58,11 +57,8 @@ while True:
         print("Enter input from base station : ( 1 ) for general heading, ( 2 ) for distance to fountain, ( 3 ) for collision warning ")
         while mode == 0:
             #waiting for input from xbee device
-            time.sleep(1)
-            flag=1111
-            print(mode)
             busyWork = 1
-    elif isControlledOffBoard == 1:
+    else:
         mode = input("( 1 ) for general heading, ( 2 ) for distance to fountain, ( 3 ) for collision warning ")
     if mode == 1:
         count = 0
@@ -86,12 +82,12 @@ while True:
         # Distance calculation
         dist = mpu.haversine_distance((lat1, lon1), (lat2, lon2)) #km
         dist = dist * 3280.24 #km -> feet
-        print("Distance to Shelby Engineering Quad Fountain : ", dist)
+        print("Feet to Shelby Engineering Quad Fountain : ", dist)
 
     elif mode == 3:
         
         count = 0
-        while count < 30:
+        while count < 50:
             # Drone location
             lat1 = vehicle.location.global_relative_frame.lat
             lon1 = vehicle.location.global_relative_frame.lon
@@ -103,7 +99,7 @@ while True:
             # Distance calculation
             dist = mpu.haversine_distance((lat1, lon1), (lat2, lon2)) #km
             dist = dist * 3280.24 #km -> feet
-            print("%s feet", dist)
+            print(dist, " feet")
             if dist < safeDistance:
                 GPIO.output(8, GPIO.HIGH) # Turn on
                 print("Unsafe distance!")
